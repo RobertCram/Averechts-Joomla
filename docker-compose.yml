@@ -1,0 +1,36 @@
+version: '2'
+services: 
+  joomla:
+    build:
+      context: ./containers/joomla
+    image: 'joomla'
+    links:
+     - mysql
+    ports:
+     - "3002:80"
+    environment:
+     - JOOMLA_DB_HOST=mysql:3306
+     - JOOMLA_DB_PASSWORD=password
+    volumes:
+     - ./website/html:/var/www/html
+    networks:
+      - averechtsnetwork
+
+  
+  mysql:
+    build:
+      context: ./containers/mysql
+    image: 'mysql'
+    ports:
+     - "3306:3306"
+    environment:
+     - MYSQL_ROOT_PASSWORD=password
+     - MYSQL_DATABASE=joomla
+    volumes:
+     - ./website/db:/var/lib/mysql
+    networks:
+      - averechtsnetwork
+
+networks:
+  averechtsnetwork:
+
